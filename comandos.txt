@@ -1,0 +1,6 @@
+npm run test:ui (painel)
+npm run report
+
+npm run test -- tests/compras/buscaSemResultados.spec.js --headed --workers=1 (ver rodando)
+
+npm run test -- tests/compras/buscaSemResultados.spec.js --headed --workers=1 --project=chromium (somente chromium)

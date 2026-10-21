@@ -1,0 +1,11 @@
+
+# Credenciais locais (copie playwright.env.example.json -> playwright.env.json e preencha)
+playwright.env.json
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
