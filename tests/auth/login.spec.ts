@@ -1,13 +1,12 @@
-// @ts-check
-import { test, expect } from "@playwright/test";
-import { getEnv } from "../support/env.js";
+import { test, expect, type Page } from "@playwright/test";
+import { getEnv } from "../support/env";
 import {
   acessarLogin,
   usernameInput,
   passwordInput,
   preencherFormulario,
   fazerLogin,
-} from "../support/loginPage.js";
+} from "../support/loginPage";
 
 /**
  * Migração de `cypress/e2e/auth/login.cy.js` para Playwright.
@@ -15,8 +14,7 @@ import {
 
 const env = getEnv();
 
-/** @param {import('@playwright/test').Page} page */
-async function permaneceNoContextoDeLogin(page) {
+async function permaneceNoContextoDeLogin(page: Page) {
   const url = page.url();
   if (url.includes("/auth")) return;
 

@@ -1,7 +1,6 @@
-// @ts-check
 import { test, expect } from "@playwright/test";
-import { getEnv } from "../support/env.js";
-import { login } from "../support/auth.js";
+import { getEnv } from "../support/env";
+import { login } from "../support/auth";
 import {
   acessarComprarLanding,
   acessarCatalogoVitrineComEmissor,
@@ -17,7 +16,7 @@ import {
   finalizarPedidoNoCarrinho,
   buscarTextoSemValidarResultado,
   validarMensagemBuscaSemResultados,
-} from "../support/fluxoCompra.js";
+} from "../support/fluxoCompra";
 
 /**
  * Migração de `cypress/e2e/compras/buscaSemResultados.cy.js` para Playwright — primeiro fluxo

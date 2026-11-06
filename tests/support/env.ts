@@ -6,13 +6,28 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ENV_FILE = path.resolve(__dirname, "../../playwright.env.json");
 const EXAMPLE_FILE = path.resolve(__dirname, "../../playwright.env.example.json");
 
-let cache = null;
+/** Campos de `playwright.env.json`. Só `baseUrl`, `username` e `password` são obrigatórios. */
+export interface Env {
+  baseUrl: string;
+  username: string;
+  password: string;
+  invalidUsername?: string;
+  invalidPassword?: string;
+  emissor?: string;
+  produto?: string;
+  planilha?: string;
+  ssoUsername?: string;
+  ssoPassword?: string;
+  [chave: string]: unknown;
+}
+
+let cache: Env | null = null;
 
 /**
  * Lê as credenciais/config locais de `playwright.env.json` (ignorado pelo git — mesmo padrão
  * do `cypress.env.json` no projeto Cypress). Copie `playwright.env.example.json` e preencha.
  */
-export function getEnv() {
+export function getEnv(): Env {
   if (cache) return cache;
 
   if (!fs.existsSync(ENV_FILE)) {
@@ -22,6 +37,6 @@ export function getEnv() {
     );
   }
 
-  cache = JSON.parse(fs.readFileSync(ENV_FILE, "utf-8"));
+  cache = JSON.parse(fs.readFileSync(ENV_FILE, "utf-8")) as Env;
   return cache;
 }

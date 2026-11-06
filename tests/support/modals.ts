@@ -1,3 +1,4 @@
+import type { Page } from "@playwright/test";
 /**
  * Modais do Hefesto (design system do Gerdau Mais). Portado do helper `fecharModaisIniciais` /
  * `tratarModaisTransientes` do projeto Cypress.
@@ -14,14 +15,14 @@ const REGEX_MODAL_TRANSIENTE =
 
 const SEL_MODAL = '[data-testid="modal-container"]';
 const SEL_MODAL_X = '.hefesto-modal__header [data-testid="hefesto-button"]';
-const TEXTO_LOADING = /aguarde alguns instantes/i;
+const TEXTO_LOADING = /aguarde alguns instantes|preparando o seu pedido/i;
 
 /**
  * Espera o modal "Aguarde alguns instantes / Carregando os dados..." passar. Ele pode demorar um
  * instante pra aparecer depois de uma ação (ex.: "Adicionar ao carrinho"), então primeiro damos
  * uma janela curta pra ele surgir e só então esperamos sumir. Se nunca aparecer, segue em frente.
  */
-export async function aguardarLoadingSumir(page, { aparecer = 2000, sumir = 30000 } = {}) {
+export async function aguardarLoadingSumir(page: Page, { aparecer = 2000, sumir = 30000 } = {}) {
   const loading = page.locator(SEL_MODAL).filter({ hasText: TEXTO_LOADING }).first();
   const apareceu = await loading
     .waitFor({ state: "visible", timeout: aparecer })
@@ -39,7 +40,7 @@ export async function aguardarLoadingSumir(page, { aparecer = 2000, sumir = 3000
  * "Continuar seu último pedido?" (pedido em andamento de uma execução anterior) — por
  * "Novo pedido", pra garantir um estado limpo e determinístico.
  */
-export async function fecharModaisIniciais(page, { maxModais = 6 } = {}) {
+export async function fecharModaisIniciais(page: Page, { maxModais = 6 } = {}) {
   const loading = page.getByText(TEXTO_LOADING).first();
   if (await loading.isVisible().catch(() => false)) {
     await loading.waitFor({ state: "hidden", timeout: 30000 }).catch(() => {});
@@ -80,7 +81,7 @@ export async function fecharModaisIniciais(page, { maxModais = 6 } = {}) {
  * Detecta modais transientes (produtos idênticos, serviço indisponível, "continuar de onde
  * parou" etc.) e clica em "Continuar"/"OK"/"Fechar"/"Entendi". Não falha se não houver modal.
  */
-export async function tratarModaisTransientes(page, { timeout = 8000 } = {}) {
+export async function tratarModaisTransientes(page: Page, { timeout = 8000 } = {}) {
   const modal = page
     .locator(`.hefesto-modal__container, [role="dialog"], ${SEL_MODAL}`)
     .first();

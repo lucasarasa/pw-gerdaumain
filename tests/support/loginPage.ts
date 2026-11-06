@@ -1,5 +1,5 @@
-// @ts-check
-import { fecharModaisIniciais } from "./modals.js";
+import type { Page } from "@playwright/test";
+import { fecharModaisIniciais } from "./modals";
 
 /**
  * Locators/ações da tela de login (/auth). Portado de `cypress/pages/loginPage/loginPage.js`.
@@ -8,10 +8,8 @@ import { fecharModaisIniciais } from "./modals.js";
  * necessidade do fallback por "existe no body?" feito no Cypress.
  */
 
-/** @typedef {import('@playwright/test').Page} Page */
 
-/** @param {Page} page */
-export function usernameInput(page) {
+export function usernameInput(page: Page) {
   return page
     .locator(
       'input[type="email"], input[name*="email" i], input[id*="email" i], input[autocomplete="username"]',
@@ -19,8 +17,7 @@ export function usernameInput(page) {
     .first();
 }
 
-/** @param {Page} page */
-export function passwordInput(page) {
+export function passwordInput(page: Page) {
   return page
     .locator(
       'input[type="password"], input[name*="password" i], input[id*="password" i], input[autocomplete="current-password"]',
@@ -28,8 +25,7 @@ export function passwordInput(page) {
     .first();
 }
 
-/** @param {Page} page */
-export function loginButton(page) {
+export function loginButton(page: Page) {
   return page
     .locator(
       'button[type="submit"], button[data-cy*="login" i], button[data-testid*="login" i]',
@@ -37,33 +33,26 @@ export function loginButton(page) {
     .first();
 }
 
-/** @param {Page} page */
-export function ssoLoginButton(page) {
+export function ssoLoginButton(page: Page) {
   return page.locator('[data-testid="sso-login-button"]');
 }
 
-/** @param {Page} page */
-export async function acessarLogin(page) {
+export async function acessarLogin(page: Page) {
   await page.goto("/auth");
   await fecharModaisIniciais(page);
 }
 
 /**
- * @param {Page} page
- * @param {string} [username]
- * @param {string} [password]
  */
-export async function preencherFormulario(page, username, password) {
+export async function preencherFormulario(page: Page, username?: string, password?: string) {
   if (username) await usernameInput(page).fill(username);
   if (password) await passwordInput(page).fill(password);
 }
 
-/** @param {Page} page */
-export async function fazerLogin(page) {
+export async function fazerLogin(page: Page) {
   await loginButton(page).click();
 }
 
-/** @param {Page} page */
-export async function clicarLoginColaborador(page) {
+export async function clicarLoginColaborador(page: Page) {
   await ssoLoginButton(page).click();
 }

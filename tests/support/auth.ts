@@ -1,5 +1,6 @@
-import { expect } from "@playwright/test";
-import { fecharModaisIniciais } from "./modals.js";
+import { expect, type Page } from "@playwright/test";
+import type { Env } from "./env";
+import { fecharModaisIniciais } from "./modals";
 
 /**
  * Login na tela /auth, com uma repetição caso a 1ª tentativa não saia de /auth (mesmo padrão
@@ -9,7 +10,7 @@ import { fecharModaisIniciais } from "./modals.js";
  * que você limpe manualmente), cada `test()` do Playwright já roda num `page`/contexto de
  * navegador isolado e com estado zerado — não existe equivalente a `limparSessao()` a chamar.
  */
-export async function login(page, env) {
+export async function login(page: Page, env: Env) {
   const fazerLogin = async () => {
     await page.goto("/auth");
     // Se a conta ainda tiver sessão presa no servidor, /auth pode redirecionar primeiro pra um
@@ -32,13 +33,13 @@ export async function login(page, env) {
   await fazerLogin();
 
   const saiuDoAuth = await page
-    .waitForURL((url) => !url.pathname.includes("/auth"), { timeout: 20000 })
+    .waitForURL((url: URL) => !url.pathname.includes("/auth"), { timeout: 20000 })
     .then(() => true)
     .catch(() => false);
 
   if (!saiuDoAuth) {
     // Login não concluiu na primeira tentativa — repete uma vez.
     await fazerLogin();
-    await page.waitForURL((url) => !url.pathname.includes("/auth"), { timeout: 30000 });
+    await page.waitForURL((url: URL) => !url.pathname.includes("/auth"), { timeout: 30000 });
   }
 }
